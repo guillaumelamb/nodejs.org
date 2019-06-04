@@ -112,11 +112,11 @@ someAsyncOperation(() => {
 1. 计算应该阻塞和轮询 I/O 的时间。
 2. 然后，处理 **轮询** 队列里的事件。
 
-当事件循环进入 **轮询** 阶段且 _没有计划计时器时_，将发生以下两种情况之一：
+当事件循环进入 **轮询** 阶段且 _没有计划计时器时_ ，将发生以下两种情况之一：
 
-* _如果 **轮询** 队列 **不是空的**_，事件循环将循环访问其回调队列并同步执行它们，直到队列已用尽，或者达到了与系统相关的硬限制。
+* _如果 **轮询** 队列 **不是空的**_ ，事件循环将循环访问其回调队列并同步执行它们，直到队列已用尽，或者达到了与系统相关的硬限制。
 
-* _如果 **轮询** 队列 **是空的**_，还有两件事发生：
+* _如果 **轮询** 队列 **是空的**_ ，还有两件事发生：
   * 如果脚本已按 `setImmediate()` 排定，则事件循环将结束 **轮询** 阶段，并继续 **检查** 阶段以执行这些计划脚本。
 
   * 如果脚本 **尚未** 按 `setImmediate()`排定，则事件循环将等待回调添加到队列中，然后立即执行。
@@ -266,44 +266,6 @@ server.on('listening', () => {});
 只有端口通过时，端口才会立即被绑定。因此，可以立即调用 `'listening'` 回调。问题是 `.on('listening')` 回调将不会被设置的时间。
 
 为了绕过此现象，`'listening'` 事件在 `nextTick()` 中排队，以允许脚本运行到完成阶段。这允许用户设置所需的任何事件处理程序。
-
-### 去重
-
-对于 `timers` 以及 `check` 两个阶段而言，多个 immediates 和 timers 中存在着单一的从 C 到 JavaScript 的转变。此去重是一种优化形式，可能会造成一些意想不到的副作用。
-
-我们用以下代码举例子说明：
-
-  ```js
- // dedup.js
- const foo = [1, 2];
- const bar = ['a', 'b'];
-
- foo.forEach(num => {
-   setImmediate(() => {
-     console.log('setImmediate', num);
-     bar.forEach(char => {
-       process.nextTick(() => {
-         console.log('process.nextTick', char);
-       });
-     });
-   });
- });
- ```
- ```bash
- $ node dedup.js
- setImmediate 1
- setImmediate 2
- process.nextTick a
- process.nextTick b
- process.nextTick a
- process.nextTick b
- ```
-
-主线程添加了两个 `setImmediate()` 事件，这样的话在处理的时候就会增加两个 `process.nextTick()` 事件。当事件轮询到 `check` 阶段的时候，它就发现目前有两个由 `setImmediate()` 创建的两个事件，第一个事件就被立即抓取且得到了处理，这样就打印出相应的结果，并且添加了两个事件到 `nextTickQueue` 队列中。
-
-因为去重的缘故，事件循环机制并不会立即折回到 C/C++ 层面上去检查 `nextTickQueue` 队列中是否存在任务项需要执行；相反地，它只会执行剩余的 `setImmediate()` 事件（目前只剩下一个）。这样一来，在处理了这个事件之后，多余两个的事件添加到了 `nextTickQueue` 队列中，所以总共产生了四个事件。
-
-此时，先前所有的 `setImmediate()` 事件已被处理。终于等到 `nextTickQueue` 队列接受检查，而事件又是按着先进先出的顺序进行处理；因此当 `nextTickQueue` 清空之时，事件循环机制认为所有的操作对于现阶段均已完成，然后直接进行下一个阶段的处理了。
 
 ## `process.nextTick()` 对比 `setImmediate()`
 

@@ -7,8 +7,7 @@ title: Security
 
 ## Reporting a Bug in Node.js
 
-Report security bugs in Node.js via [HackerOne](https://hackerone.com/nodejs) or
-by emailing [security@nodejs.org](mailto:security@nodejs.org).
+Report security bugs in Node.js via [HackerOne](https://hackerone.com/nodejs).
 
 Your report will be acknowledged within 24 hours, and you’ll receive a more detailed response to your report within 48
 hours indicating the next steps in handling your submission.
@@ -20,14 +19,12 @@ These updates will be sent at least every five days; in practice, this is more l
 ### Node.js Bug Bounty Program
 
 The Node.js project engages in an official bug bounty program for security researchers and responsible public disclosures.
-
-The program is managed through the HackerOne platform at [https://hackerone.com/nodejs](https://hackerone.com/nodejs) with further details.
+The program is managed through the HackerOne platform. See <https://hackerone.com/nodejs> for further details.
 
 ## Reporting a Bug in a third party module
 
 Security bugs in third party modules should be reported to their respective maintainers and should also be coordinated
-through the [Node Ecosystem Security Team](https://hackerone.com/nodejs-ecosystem) or by emailing 
-[security-ecosystem@nodejs.org](mailto:security-ecosystem@nodejs.org).
+through the Node Ecosystem Security Team via [HackerOne](https://hackerone.com/nodejs-ecosystem).
 
 Details regarding this process can be found in the [Security Working Group repository](https://github.com/nodejs/security-wg/blob/master/processes/third_party_vuln_process.md).
 
@@ -62,8 +59,8 @@ release process above to ensure that the disclosure is handled in a consistent m
 
 Security notifications will be distributed via the following methods.
 
-- [https://groups.google.com/group/nodejs-sec](https://groups.google.com/group/nodejs-sec)
-- [https://nodejs.org/en/blog](https://nodejs.org/en/blog)
+- <https://groups.google.com/group/nodejs-sec>
+- <https://nodejs.org/en/blog>
 
 ## Comments on this Policy
 
